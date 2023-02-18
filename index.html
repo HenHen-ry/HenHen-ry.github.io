@@ -30,8 +30,37 @@
 
             function searchInGoogle()
             {
-                window.open('https://google.com/search?q='+$('input[id=inputToSearch]').val(), '_blank');
+                if( $('input[id=inputToSearch]').val()!='' )
+                    window.open('https://google.com/search?q='+$('input[id=inputToSearch]').val(), '_blank');
+
                 return false;
+            }
+
+            function closeWindow()
+            {
+                let timerInterval
+                Swal.fire({
+                    title: '掰掰了~ 小視窗~~~',
+                    html: '小視窗將於 <b></b> 秒後關閉',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading()
+                        const b = Swal.getHtmlContainer().querySelector('b')
+                        timerInterval = setInterval(() => {
+                            b.textContent = Swal.getTimerLeft()/1000;
+                        }, 100)
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval);
+                        //window.opener=null; window.close();
+                    }
+                    }).then((result) => {
+                    /* Read more about handling dismissals below */
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        //console.log('I was closed by the timer')
+                    }
+                });
             }
         </script>
     </head>
@@ -58,19 +87,19 @@
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
-                    <input id="inputToSearch" class="form-control mr-sm-2" type="text" placeholder="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="return searchInGoogle();">Search</button>
+                    <input id="inputToSearch" class="form-control mr-sm-2" type="text" placeholder="一輸就入...">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="return searchInGoogle();">搜尋</button>
                 </form>
             </div>
         </nav>
 
         <div class="jumbotron">
-            <h1 class="display-3">Jumbo heading</h1>
-            <p class="lead">Jumbo helper text</p>
-            <hr class="my-2">
-            <p>More info</p>
+            <h1 class="display-3">再忙也要給你來杯咖啡</h1>
+            <p class="lead">可是我不喝咖啡啊</p>
+            <!-- <hr class="my-2">
+            <p>More info</p> -->
             <p class="lead">
-                <a class="btn btn-primary btn-lg" href="Jumbo action link" role="button">Jumbo action name</a>
+                <a class="btn btn-primary btn-lg" href="#" onclick="closeWindow();" role="button">關閉小視窗</a>
             </p>
         </div>
     </body>
